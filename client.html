@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>WebSocket Test</h1>
+    <button onclick="connect()">Connect</button>
+    <button onclick="sendPing()">Send Ping</button>
+    <div id="output"></div>
+
+    <script>
+        let ws = null;
+        
+        function connect() {
+            // Try with less validation
+            ws = new WebSocket('ws://localhost:8080/', ['soap', 'wamp']);
+            
+            ws.onopen = function(event) {
+                output('Connected!');
+                // Send a test message immediately
+                setTimeout(() => {
+                    ws.send("test");
+                }, 100);
+            };
+            
+            ws.onmessage = function(event) {
+                output('Received: ' + event.data);
+            };
+            
+            ws.onclose = function(event) {
+                output('Disconnected: ' + event.code + ' - ' + event.reason);
+            };
+            
+            ws.onerror = function(error) {
+                output('Error: ' + error);
+            };
+        }
+        
+        function sendPing() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send("ping");
+                output('Sent: ping');
+            }
+        }
+        
+        function output(message) {
+            document.getElementById('output').innerHTML += message + '<br>';
+        }
+    </script>
+</body>
+</html>

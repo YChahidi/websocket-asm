@@ -1,0 +1,8 @@
+GET / HTTP/1.1
+Host: localhost:8080
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Key: test123
+Sec-WebSocket-Version: 13
+
+Åhello
